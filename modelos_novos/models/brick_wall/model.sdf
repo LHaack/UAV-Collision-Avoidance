@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.9">
+  <!-- Container apenas para a textura de tijolo (materials/textures/brick_antique_1.jpg).
+       Os obstaculos do mundo referenciam essa textura via albedo_map; este modelo
+       em si nao e instanciado na cena. -->
+  <model name="brick_wall">
+    <static>true</static>
+    <link name="link"/>
+  </model>
+</sdf>
