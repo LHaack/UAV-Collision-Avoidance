@@ -1,0 +1,63 @@
+===========================================================================
+ MODELOS NOVOS — drone inimigo (omnicopter) + parede de tijolos
+===========================================================================
+
+Este pacote contém:
+  models/x500_omni_base/        -> base do drone inimigo (corpo = omnicopter,
+                                   fisica = x500 inalterada)
+  models/x500_lidar_3d_enemy/   -> o drone inimigo em si (usa x500_omni_base)
+  models/brick_wall/            -> textura de tijolo (brick_antique)
+  models/lidar_3d/              -> dependencia do inimigo (o lidar 3D)
+  tests/parse_txtmap.py         -> gerador de mapa que aplica a textura de
+                                   tijolo nas paredes do mundo gerado
+
+---------------------------------------------------------------------------
+ ONDE EXTRAIR CADA COISA
+---------------------------------------------------------------------------
+
+1) AS 4 PASTAS DE models/  ->  vao para a pasta de modelos do gz da PX4:
+
+      <PX4-Autopilot>/Tools/simulation/gz/models/
+
+   Ou seja, depois de copiar deve existir:
+      <PX4-Autopilot>/Tools/simulation/gz/models/x500_omni_base/
+      <PX4-Autopilot>/Tools/simulation/gz/models/x500_lidar_3d_enemy/
+      <PX4-Autopilot>/Tools/simulation/gz/models/brick_wall/
+      <PX4-Autopilot>/Tools/simulation/gz/models/lidar_3d/
+
+   OBS: se a PX4 dele JA tiver "lidar_3d" e/ou "x500_lidar_3d_enemy",
+   pode sobrescrever (a versao daqui e a atualizada) ou pular o lidar_3d.
+
+2) tests/parse_txtmap.py  ->  vai no PROJETO (NAO na PX4), substituindo o
+   gerador de mapa existente:
+
+      <projeto>/tests/parse_txtmap.py
+
+   Esse arquivo so e necessario se ele gera os mapas com esse script.
+   E ele que escreve, em cada parede do mundo, o material:
+      <albedo_map>model://brick_wall/materials/textures/brick_antique_1.jpg</albedo_map>
+   Sem essa parte, a parede NAO fica com cara de tijolo (mesmo tendo a
+   pasta brick_wall instalada).
+
+---------------------------------------------------------------------------
+ DEPENDENCIAS QUE JA EXISTEM NA PX4 (stock) — nao precisa copiar
+---------------------------------------------------------------------------
+   - omnicopter   (usado como malha visual do inimigo)
+   - x500_base    (fisica/colisoes/rotores herdados)
+   - x500         (drone amigo, inalterado)
+
+   Essas tres ja vem por padrao em
+   <PX4-Autopilot>/Tools/simulation/gz/models/ — so confira que existem.
+
+---------------------------------------------------------------------------
+ COMO FUNCIONA (resumo)
+---------------------------------------------------------------------------
+ - Os drones AMIGOS continuam usando o modelo "x500_lidar_3d" (corpo x500).
+ - Os drones INIMIGOS usam "x500_lidar_3d_enemy", que herda TODA a fisica do
+   x500 (massa, inercia, 4 rotores, plugins de motor) mas troca apenas o
+   VISUAL do corpo pela malha do omnicopter (via x500_omni_base). Nada de
+   fisica muda — so a aparencia.
+ - As paredes do mapa, geradas pelo parse_txtmap.py, recebem a textura de
+   tijolo (brick_wall). Em qualquer tamanho de parede a textura aparece;
+   em paredes muito grandes o padrao de tijolo pode esticar um pouco.
+===========================================================================
