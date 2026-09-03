@@ -1,0 +1,14 @@
+material BrickAntique
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture brick_antique_1.jpg
+        scale 0.5 0.5
+      }
+    }
+  }
+}
